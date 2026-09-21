@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Girl — Manual Prático de SQL</title>
+<meta name="description" content="Manual visual e prático de SQL para aprender consultas, filtros, JOINs, funções e análise de dados.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💾</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- barra de progresso de leitura -->
+<div class="progress-bar" id="progressBar" aria-hidden="true"></div>
+
+<!-- ===================== HEADER / NAV ===================== -->
+<header class="titlebar" id="siteHeader">
+  <div class="titlebar-top">
+    <a href="#inicio" class="brand">
+      <span class="brand-icon" aria-hidden="true">▚</span>
+      <span class="brand-text">sql<em>girl</em><span class="brand-ext">.exe</span></span>
+    </a>
+
+    <div class="titlebar-controls">
+      <button class="win-btn" id="searchToggle" aria-expanded="false" aria-controls="searchPanel" aria-label="Abrir busca">
+        <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="2"/><line x1="13" y1="13" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="win-btn" id="themeToggle" aria-label="Alternar modo noturno">
+        <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M10 2a8 8 0 108 8 6.5 6.5 0 01-8-8z"/></svg>
+      </button>
+      <button class="win-btn hamburger" id="menuToggle" aria-expanded="false" aria-controls="navPanel" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="search-panel" id="searchPanel" hidden>
+    <label for="searchInput" class="sr-only">Buscar no manual</label>
+    <input type="search" id="searchInput" placeholder="Buscar comando, ex: JOIN, WHERE, COUNT..." autocomplete="off">
+    <div class="search-results" id="searchResults" role="listbox" aria-label="Resultados da busca"></div>
+  </div>
+
+  <nav class="nav-panel" id="navPanel" aria-label="Navegação do manual">
+    <a href="#inicio" class="nav-link"><span>🏠</span>Início</a>
+    <a href="#fundamentos" class="nav-link"><span>📖</span>Fundamentos</a>
+    <a href="#select" class="nav-link"><span>🔎</span>SELECT</a>
+    <a href="#where" class="nav-link"><span>🎯</span>WHERE</a>
+    <a href="#joins" class="nav-link"><span>🔗</span>JOINs</a>
+    <a href="#groupby" class="nav-link"><span>📊</span>GROUP BY</a>
+    <a href="#orderby" class="nav-link"><span>📈</span>ORDER BY</a>
+    <a href="#funcoes" class="nav-link"><span>🧩</span>Funções</a>
+    <a href="#erros" class="nav-link"><span>⚠️</span>Erros comuns</a>
+    <a href="#desafios" class="nav-link"><span>🧠</span>Desafios</a>
+    <a href="#cheatsheet" class="nav-link"><span>📚</span>Cheat Sheet</a>
+  </nav>
+</header>
+
+<main id="mainContent">
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="inicio">
+  <div class="hero-decor" aria-hidden="true">
+    <span class="deco star s1">✦</span>
+    <span class="deco heart h1">♥</span>
+    <span class="deco star s2">✧</span>
+    <span class="deco pixel p1"></span>
+    <span class="deco heart h2">♥</span>
+    <span class="deco star s3">✦</span>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="badge-tag"><span class="dot"></span>data girl.exe iniciado</p>
+      <h1 class="hero-title">SQL<span class="hero-title-accent">GIRL</span></h1>
+      <p class="hero-sub">Manual prático de SQL para quem quer transformar dados em decisões.</p>
+      <p class="hero-text">Do <code>SELECT</code> ao <code>JOIN</code>, das funções às consultas complexas — um guia visual para aprender, consultar e dominar SQL.</p>
+      <div class="hero-actions">
+        <a href="#fundamentos" class="btn btn-primary">Começar a estudar</a>
+        <a href="#cheatsheet" class="btn btn-ghost">Ver cheat sheet</a>
+      </div>
+    </div>
+
+    <div class="hero-window" role="img" aria-label="Janela de terminal mostrando uma consulta SQL de exemplo">
+      <div class="window-bar">
+        <span class="window-title">query.sql</span>
+        <span class="window-dots"><i></i><i></i><i></i></span>
+      </div>
+      <div class="window-body">
+        <pre class="hero-code"><code><span class="tok-kw">SELECT</span> *
+<span class="tok-kw">FROM</span> dreams
+<span class="tok-kw">WHERE</span> girl <span class="tok-op">=</span> <span class="tok-str">'data'</span>
+  <span class="tok-kw">AND</span> energy <span class="tok-op">&gt;</span> <span class="tok-num">100</span>;</code></pre>
+        <div class="window-status"><span class="blink">●</span> query completed — 4 rows · 100% data energy</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>loading manual.sql…</span><span>100% data energy</span><span>SELECT * FROM dreams;</span><span>query completed ✓</span>
+      <span>loading manual.sql…</span><span>100% data energy</span><span>SELECT * FROM dreams;</span><span>query completed ✓</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FUNDAMENTOS ===================== -->
+<section class="section" id="fundamentos">
+  <div class="section-inner">
+    <h2 class="section-title">Fundamentos</h2>
+    <p class="section-lead">Antes de escrever a primeira consulta, entenda o essencial: o que é SQL e como uma consulta é montada.</p>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h3 class="card-title">O que é SQL?</h3>
+        <p>SQL (<em>Structured Query Language</em>) é a linguagem usada para conversar com bancos de dados relacionais — pedir informações, filtrar, cruzar tabelas e atualizar registros. É a ferramenta que transforma uma pergunta de negócio em uma resposta concreta, direto na fonte dos dados.</p>
+      </div>
+      <div class="card">
+        <h3 class="card-title">Para que serve?</h3>
+        <ul class="check-list">
+          <li>Consultar dados</li>
+          <li>Filtrar informações</li>
+          <li>Criar relatórios</li>
+          <li>Analisar indicadores</li>
+          <li>Cruzar tabelas</li>
+          <li>Atualizar dados</li>
+          <li>Criar estruturas</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="anatomy">
+      <h3 class="card-title">Estrutura básica de uma consulta</h3>
+      <div class="code-window" data-filename="query.sql">
+        <div class="window-bar">
+          <span class="window-title">query.sql</span>
+          <button class="copy-btn" type="button" aria-label="Copiar código">
+            <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+            copiar
+          </button>
+        </div>
+        <div class="window-body">
+          <pre class="code-lines"><code><span class="tok-kw">SELECT</span> coluna
+<span class="tok-kw">FROM</span> tabela
+<span class="tok-kw">WHERE</span> condição;</code></pre>
+        </div>
+      </div>
+
+      <div class="anatomy-explain">
+        <div class="anatomy-item"><span class="anatomy-kw">SELECT</span><p>o que eu quero ver</p></div>
+        <div class="anatomy-item"><span class="anatomy-kw">FROM</span><p>de onde os dados vêm</p></div>
+        <div class="anatomy-item"><span class="anatomy-kw">WHERE</span><p>qual filtro aplicar</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SELECT ===================== -->
+<section class="section section-alt" id="select">
+  <div class="section-inner">
+    <h2 class="section-title">🔎 SELECT</h2>
+    <p class="section-lead">O comando mais usado do SQL: escolhe quais colunas você quer ver no resultado.</p>
+
+    <div class="lesson-grid">
+      <div class="lesson-col">
+        <h4 class="mini-label">Sintaxe</h4>
+        <div class="code-window" data-filename="select.sql">
+          <div class="window-bar"><span class="window-title">select.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> coluna
+<span class="tok-kw">FROM</span> tabela;</code></pre></div>
+        </div>
+
+        <h4 class="mini-label">Exemplo</h4>
+        <div class="code-window" data-filename="clientes.sql">
+          <div class="window-bar"><span class="window-title">clientes.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> nome, email
+<span class="tok-kw">FROM</span> clientes;</code></pre></div>
+        </div>
+
+        <p class="explain-text"><strong>O que acontece?</strong> O banco procura a tabela <code>clientes</code> e devolve apenas as colunas <code>nome</code> e <code>email</code> de todas as linhas — nada mais.</p>
+      </div>
+
+      <div class="lesson-col">
+        <h4 class="mini-label">Exemplo prático</h4>
+        <div class="table-wrap">
+          <table>
+            <caption class="sr-only">Tabela clientes</caption>
+            <thead><tr><th>id</th><th>nome</th><th>cidade</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Ana</td><td>Fortaleza</td></tr>
+              <tr><td>2</td><td>Júlia</td><td>Recife</td></tr>
+              <tr><td>3</td><td>Maria</td><td>Salvador</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="code-window" data-filename="cidade.sql">
+          <div class="window-bar"><span class="window-title">cidade.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> nome, cidade
+<span class="tok-kw">FROM</span> clientes;</code></pre></div>
+        </div>
+
+        <p class="mini-label">Resultado ↓</p>
+        <div class="table-wrap table-result">
+          <table>
+            <caption class="sr-only">Resultado da consulta</caption>
+            <thead><tr><th>nome</th><th>cidade</th></tr></thead>
+            <tbody>
+              <tr><td>Ana</td><td>Fortaleza</td></tr>
+              <tr><td>Júlia</td><td>Recife</td></tr>
+              <tr><td>Maria</td><td>Salvador</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHERE ===================== -->
+<section class="section" id="where">
+  <div class="section-inner">
+    <h2 class="section-title">🎯 WHERE</h2>
+    <p class="section-lead">Filtra quais linhas entram no resultado. Sem <code>WHERE</code>, o SQL devolve tudo.</p>
+
+    <div class="lesson-grid">
+      <div class="lesson-col">
+        <h4 class="mini-label">Sintaxe</h4>
+        <div class="code-window" data-filename="where.sql">
+          <div class="window-bar"><span class="window-title">where.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> coluna
+<span class="tok-kw">FROM</span> tabela
+<span class="tok-kw">WHERE</span> condição;</code></pre></div>
+        </div>
+        <h4 class="mini-label">Exemplo</h4>
+        <div class="code-window" data-filename="fortaleza.sql">
+          <div class="window-bar"><span class="window-title">fortaleza.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> *
+<span class="tok-kw">FROM</span> clientes
+<span class="tok-kw">WHERE</span> cidade <span class="tok-op">=</span> <span class="tok-str">'Fortaleza'</span>;</code></pre></div>
+        </div>
+      </div>
+
+      <div class="lesson-col">
+        <h4 class="mini-label">Mais condições comuns</h4>
+        <div class="code-window" data-filename="condicoes.sql">
+          <div class="window-bar"><span class="window-title">condicoes.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">WHERE</span> idade <span class="tok-op">&gt;</span> <span class="tok-num">18</span>
+<span class="tok-kw">WHERE</span> salario <span class="tok-op">&gt;=</span> <span class="tok-num">3000</span>
+<span class="tok-kw">WHERE</span> status <span class="tok-op">=</span> <span class="tok-str">'Ativo'</span>
+<span class="tok-kw">WHERE</span> cidade <span class="tok-op">&lt;&gt;</span> <span class="tok-str">'Recife'</span></code></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="card-title sub-heading">Operadores</h3>
+    <div class="grid grid-op" id="operatorsGrid">
+      <!-- preenchido via JS a partir de OPERATORS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================== JOINS ===================== -->
+<section class="section section-alt" id="joins">
+  <div class="section-inner">
+    <h2 class="section-title">🔗 JOINs</h2>
+    <p class="section-lead">JOINs combinam linhas de duas tabelas a partir de uma coluna em comum — a base de praticamente toda análise cruzada.</p>
+
+    <div class="join-diagram" aria-hidden="true">
+      <div class="join-set join-a">clientes</div>
+      <div class="join-set join-b">vendas</div>
+    </div>
+
+    <div class="join-types">
+      <article class="join-card">
+        <h3 class="card-title">INNER JOIN</h3>
+        <p>Retorna apenas os registros que possuem correspondência nas duas tabelas.</p>
+        <div class="code-window" data-filename="inner.sql">
+          <div class="window-bar"><span class="window-title">inner.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> *
+<span class="tok-kw">FROM</span> clientes c
+<span class="tok-kw">INNER JOIN</span> vendas v
+    <span class="tok-kw">ON</span> c.id <span class="tok-op">=</span> v.cliente_id;</code></pre></div>
+        </div>
+      </article>
+
+      <article class="join-card">
+        <h3 class="card-title">LEFT JOIN</h3>
+        <p>Traz todos os registros da tabela da esquerda, com os dados da direita quando existirem — senão, vem <code>NULL</code>.</p>
+        <div class="code-window" data-filename="left.sql">
+          <div class="window-bar"><span class="window-title">left.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> *
+<span class="tok-kw">FROM</span> clientes c
+<span class="tok-kw">LEFT JOIN</span> vendas v
+    <span class="tok-kw">ON</span> c.id <span class="tok-op">=</span> v.cliente_id;</code></pre></div>
+        </div>
+      </article>
+
+      <article class="join-card">
+        <h3 class="card-title">RIGHT JOIN</h3>
+        <p>O espelho do LEFT JOIN: traz tudo da tabela da direita, com correspondência da esquerda quando houver.</p>
+        <div class="code-window" data-filename="right.sql">
+          <div class="window-bar"><span class="window-title">right.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> *
+<span class="tok-kw">FROM</span> clientes c
+<span class="tok-kw">RIGHT JOIN</span> vendas v
+    <span class="tok-kw">ON</span> c.id <span class="tok-op">=</span> v.cliente_id;</code></pre></div>
+        </div>
+      </article>
+
+      <article class="join-card">
+        <h3 class="card-title">FULL OUTER JOIN</h3>
+        <p>Traz tudo das duas tabelas, com <code>NULL</code> onde não houver correspondência de nenhum dos lados.</p>
+        <div class="code-window" data-filename="full.sql">
+          <div class="window-bar"><span class="window-title">full.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> *
+<span class="tok-kw">FROM</span> clientes c
+<span class="tok-kw">FULL OUTER JOIN</span> vendas v
+    <span class="tok-kw">ON</span> c.id <span class="tok-op">=</span> v.cliente_id;</code></pre></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GROUP BY ===================== -->
+<section class="section" id="groupby">
+  <div class="section-inner">
+    <h2 class="section-title">📊 GROUP BY</h2>
+    <p class="section-lead">Agrupa linhas que compartilham um valor, para calcular algo por grupo — contagem, soma, média.</p>
+
+    <div class="lesson-grid">
+      <div class="lesson-col">
+        <h4 class="mini-label">Sintaxe</h4>
+        <div class="code-window" data-filename="groupby.sql">
+          <div class="window-bar"><span class="window-title">groupby.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> coluna, <span class="tok-fn">COUNT</span>(*)
+<span class="tok-kw">FROM</span> tabela
+<span class="tok-kw">GROUP BY</span> coluna;</code></pre></div>
+        </div>
+        <h4 class="mini-label">Exemplo</h4>
+        <div class="code-window" data-filename="cidades.sql">
+          <div class="window-bar"><span class="window-title">cidades.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> cidade, <span class="tok-fn">COUNT</span>(*) <span class="tok-kw">AS</span> quantidade
+<span class="tok-kw">FROM</span> clientes
+<span class="tok-kw">GROUP BY</span> cidade;</code></pre></div>
+        </div>
+      </div>
+
+      <div class="lesson-col">
+        <p class="mini-label">Resultado ↓</p>
+        <div class="table-wrap table-result">
+          <table>
+            <caption class="sr-only">Resultado do agrupamento por cidade</caption>
+            <thead><tr><th>cidade</th><th>quantidade</th></tr></thead>
+            <tbody>
+              <tr><td>Fortaleza</td><td>120</td></tr>
+              <tr><td>Recife</td><td>85</td></tr>
+              <tr><td>Salvador</td><td>97</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="explain-text"><strong>Regra de ouro:</strong> toda coluna no <code>SELECT</code> que não está dentro de uma função de agregação precisa estar no <code>GROUP BY</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ORDER BY ===================== -->
+<section class="section section-alt" id="orderby">
+  <div class="section-inner">
+    <h2 class="section-title">📈 ORDER BY</h2>
+    <p class="section-lead">Define a ordem das linhas no resultado.</p>
+
+    <div class="lesson-grid">
+      <div class="lesson-col">
+        <div class="code-window" data-filename="orderby.sql">
+          <div class="window-bar"><span class="window-title">orderby.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> *
+<span class="tok-kw">FROM</span> vendas
+<span class="tok-kw">ORDER BY</span> valor <span class="tok-kw">DESC</span>;</code></pre></div>
+        </div>
+      </div>
+      <div class="lesson-col">
+        <div class="grid grid-2 order-pills">
+          <div class="pill-card"><span class="pill">ASC</span><p>crescente — do menor para o maior</p></div>
+          <div class="pill-card"><span class="pill">DESC</span><p>decrescente — do maior para o menor</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FUNÇÕES ===================== -->
+<section class="section" id="funcoes">
+  <div class="section-inner">
+    <h2 class="section-title">🧩 SQL Functions 💅</h2>
+    <p class="section-lead">Funções prontas para agregar, tratar texto e trabalhar com datas — o kit básico de qualquer análise.</p>
+
+    <h3 class="card-title sub-heading">Funções de agregação</h3>
+    <div class="grid grid-3" id="aggFunctionsGrid"></div>
+
+    <h3 class="card-title sub-heading">Funções de texto</h3>
+    <div class="chip-row" id="textFunctionsRow"></div>
+
+    <h3 class="card-title sub-heading">Funções de data</h3>
+    <div class="chip-row" id="dateFunctionsRow"></div>
+
+    <p class="db-note">⚠️ Algumas funções variam entre bancos de dados — o que funciona em <strong>PostgreSQL</strong> pode ter outro nome em <strong>MySQL</strong>, <strong>SQL Server</strong> ou <strong>Oracle</strong>. Sempre confira a documentação do banco que você está usando.</p>
+
+    <h3 class="card-title sub-heading">CASE WHEN — o IF do SQL</h3>
+    <div class="lesson-grid">
+      <div class="lesson-col">
+        <div class="code-window" data-filename="case.sql">
+          <div class="window-bar"><span class="window-title">case.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">CASE</span>
+    <span class="tok-kw">WHEN</span> condição <span class="tok-kw">THEN</span> resultado
+    <span class="tok-kw">ELSE</span> resultado
+<span class="tok-kw">END</span></code></pre></div>
+        </div>
+      </div>
+      <div class="lesson-col">
+        <div class="code-window" data-filename="faixa_salarial.sql">
+          <div class="window-bar"><span class="window-title">faixa_salarial.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span>
+    nome,
+    salario,
+    <span class="tok-kw">CASE</span>
+        <span class="tok-kw">WHEN</span> salario <span class="tok-op">&gt;=</span> <span class="tok-num">5000</span> <span class="tok-kw">THEN</span> <span class="tok-str">'Alto'</span>
+        <span class="tok-kw">WHEN</span> salario <span class="tok-op">&gt;=</span> <span class="tok-num">3000</span> <span class="tok-kw">THEN</span> <span class="tok-str">'Médio'</span>
+        <span class="tok-kw">ELSE</span> <span class="tok-str">'Baixo'</span>
+    <span class="tok-kw">END</span> <span class="tok-kw">AS</span> faixa_salarial
+<span class="tok-kw">FROM</span> funcionarios;</code></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ERROS COMUNS ===================== -->
+<section class="section section-alt" id="erros">
+  <div class="section-inner">
+    <h2 class="section-title">⚠️ SQL erros que toda data girl já cometeu</h2>
+    <p class="section-lead">Todo mundo já caiu nessas — reconhecer rápido economiza horas de debug.</p>
+
+    <div class="grid grid-2" id="errorsGrid"></div>
+  </div>
+</section>
+
+<!-- ===================== SQL NA PRÁTICA ===================== -->
+<section class="section" id="pratica">
+  <div class="section-inner">
+    <h2 class="section-title">From zero to query ✨</h2>
+    <p class="section-lead">Um banco fictício com duas tabelas — <code>clientes</code> e <code>vendas</code> — para evoluir consulta por consulta.</p>
+
+    <div class="mini-schema">
+      <div class="schema-table">
+        <div class="schema-head">clientes</div>
+        <ul><li>id</li><li>nome</li><li>cidade</li><li>idade</li></ul>
+      </div>
+      <div class="schema-table">
+        <div class="schema-head">vendas</div>
+        <ul><li>id</li><li>cliente_id</li><li>produto</li><li>valor</li><li>data_venda</li></ul>
+      </div>
+    </div>
+
+    <div class="levels" id="levelsWrap">
+      <div class="level" data-level="1">
+        <span class="level-tag">Nível 1</span>
+        <div class="code-window" data-filename="nivel1.sql">
+          <div class="window-bar"><span class="window-title">nivel1.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> *
+<span class="tok-kw">FROM</span> clientes;</code></pre></div>
+        </div>
+      </div>
+      <div class="level" data-level="2">
+        <span class="level-tag">Nível 2</span>
+        <div class="code-window" data-filename="nivel2.sql">
+          <div class="window-bar"><span class="window-title">nivel2.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> nome, cidade
+<span class="tok-kw">FROM</span> clientes
+<span class="tok-kw">WHERE</span> cidade <span class="tok-op">=</span> <span class="tok-str">'Fortaleza'</span>;</code></pre></div>
+        </div>
+      </div>
+      <div class="level" data-level="3">
+        <span class="level-tag">Nível 3</span>
+        <div class="code-window" data-filename="nivel3.sql">
+          <div class="window-bar"><span class="window-title">nivel3.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span> cidade, <span class="tok-fn">COUNT</span>(*) <span class="tok-kw">AS</span> clientes
+<span class="tok-kw">FROM</span> clientes
+<span class="tok-kw">GROUP BY</span> cidade;</code></pre></div>
+        </div>
+      </div>
+      <div class="level" data-level="4">
+        <span class="level-tag">Nível 4</span>
+        <div class="code-window" data-filename="nivel4.sql">
+          <div class="window-bar"><span class="window-title">nivel4.sql</span><button class="copy-btn" type="button" aria-label="Copiar código"><svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="3" width="10" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>copiar</button></div>
+          <div class="window-body"><pre class="code-lines"><code><span class="tok-kw">SELECT</span>
+    c.nome,
+    <span class="tok-fn">SUM</span>(v.valor) <span class="tok-kw">AS</span> total_compras
+<span class="tok-kw">FROM</span> clientes c
+<span class="tok-kw">INNER JOIN</span> vendas v
+    <span class="tok-kw">ON</span> c.id <span class="tok-op">=</span> v.cliente_id
+<span class="tok-kw">GROUP BY</span> c.nome
+<span class="tok-kw">ORDER BY</span> total_compras <span class="tok-kw">DESC</span>;</code></pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DESAFIOS ===================== -->
+<section class="section section-alt" id="desafios">
+  <div class="section-inner">
+    <h2 class="section-title">🧠 SQL Challenge 💖</h2>
+    <p class="section-lead">Tente escrever a consulta antes de revelar a resposta — é assim que fixa de verdade.</p>
+
+    <div class="challenges" id="challengesWrap"></div>
+  </div>
+</section>
+
+<!-- ===================== CHEAT SHEET ===================== -->
+<section class="section" id="cheatsheet">
+  <div class="section-inner">
+    <h2 class="section-title">📚 Cheat Sheet</h2>
+    <p class="section-lead">Referência rápida com os comandos mais usados no dia a dia.</p>
+
+    <div class="table-wrap cheat-wrap">
+      <table id="cheatTable">
+        <thead><tr><th>Comando</th><th>Para que serve</th><th>Exemplo</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FRASE FINAL ===================== -->
+<section class="final">
+  <p class="final-phrase">Não é magia. É dado bem consultado. 💻💖</p>
+  <p class="final-code"><code>SELECT * FROM future WHERE girl = 'data';</code></p>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <p>sql<em>girl</em>.exe — manual construído com HTML, CSS e SQL no coração.</p>
+  <button class="win-btn back-to-top" id="backToTop" aria-label="Voltar ao topo">↑</button>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
